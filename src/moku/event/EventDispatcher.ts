@@ -2,15 +2,15 @@ import { IEvents } from './Events';
 
 interface IListeners {
   // events.type を key の配列 - event listener or null がセットされる
-  [key: string]: Array<{ (events: IEvents): void }|null>;
+  [key: string]: Array<{ (events: IEvents): void } | null>;
 }
 
 interface IEventDispatcher {
   listeners: IListeners;
   destroy(): boolean;
-  on(type: string, listener: (events: IEvents)=>void): boolean;
-  off(type: string, listener: (events: IEvents)=>void): boolean;
-  has(type: string, listener: (events: IEvents)=>void): boolean;
+  on(type: string, listener: (events: IEvents) => void): boolean;
+  off(type: string, listener: (events: IEvents) => void): boolean;
+  has(type: string, listener: (events: IEvents) => void): boolean;
   dispatch(events: IEvents): boolean;
 }
 
@@ -18,11 +18,11 @@ export default class EventDispatcher implements IEventDispatcher {
   listeners: IListeners;
 
   constructor() {
-    this.listeners = {...{}};
+    this.listeners = { ...{} };
   }
 
   public destroy(): boolean {
-    this.listeners = {...{}}
+    this.listeners = { ...{} };
     return true;
   }
 
@@ -63,7 +63,7 @@ export default class EventDispatcher implements IEventDispatcher {
     return true;
   }
 
-  private clean(type: string, types: Array<{ (events: IEvents): void }|null>): boolean {
+  private clean(type: string, types: Array<{ (events: IEvents): void } | null>): boolean {
     const hasMethod = types.some((listener) => typeof listener === 'function');
     if (!hasMethod) {
       this.listeners[type] = [...[]];
@@ -71,7 +71,7 @@ export default class EventDispatcher implements IEventDispatcher {
     return !hasMethod;
   }
 
-  public has(type: string, listener: (events: IEvents)=>void): boolean {
+  public has(type: string, listener: (events: IEvents) => void): boolean {
     if (!type || typeof listener !== 'function') {
       return false;
     }
@@ -92,8 +92,9 @@ export default class EventDispatcher implements IEventDispatcher {
       // listeners に key 存在しない
       return false;
     }
-    listeners[type].filter(listener => typeof listener === 'function')
-      .map(listener => listener?.call(this, events))
+    listeners[type]
+      .filter((listener) => typeof listener === 'function')
+      .map((listener) => listener?.call(this, events));
     return true;
   }
 }
