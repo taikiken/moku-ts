@@ -92,6 +92,7 @@ export default class EventDispatcher implements IEventDispatcher {
       // listeners に key 存在しない
       return false;
     }
+    events.currentTarget = this;
     listeners[type]
       .filter((listener) => typeof listener === 'function')
       .map((listener) => listener?.call(this, events));

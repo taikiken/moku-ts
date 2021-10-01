@@ -3,18 +3,21 @@ export interface IEvents {
   type: string;
   target: any;
   currentTarget: any;
+  option?: any;
 }
 
 export default class Events implements IEvents {
   type: string;
   target: any;
   currentTarget: any;
+  option?: any;
   constructor(type: string, target: any = null, currentTarget: any = null) {
     this.type = type;
     this.target = target;
     this.currentTarget = currentTarget;
+    this.option = null;
   }
-  clone(): Events {
+  public clone(): Events {
     return new Events(this.type, this.target, this.currentTarget);
   }
 }
