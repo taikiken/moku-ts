@@ -32,7 +32,7 @@ export default class Intersection {
     this.observer = new IntersectionObserver(this.check, options);
   }
   private check(entries: Array<IntersectionObserverEntry>): void {
-    entries.map((entry) => (entry.isIntersecting ? this.intersect(entry) : this.parallel(entry)));
+    entries.map((entry) => (entry.isIntersecting ? this.intersect(entry) : this.without(entry)));
   }
   private disconnect(): boolean {
     this.observer.disconnect();
@@ -44,8 +44,8 @@ export default class Intersection {
   public intersect(entry: IntersectionObserverEntry): void {
     console.log('Intersection.intersect - entry', entry);
   }
-  public parallel(entry: IntersectionObserverEntry): void {
-    console.log('Intersection.parallel - entry', entry);
+  public without(entry: IntersectionObserverEntry): void {
+    console.log('Intersection.without - entry', entry);
   }
   public observe(element: HTMLElement): boolean {
     if (this.elements.includes(element)) {
