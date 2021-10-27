@@ -6,6 +6,9 @@ export interface IEvents {
   option?: any;
 }
 
+/**
+ * {@link EventDispatcher} に使用する event
+ */
 export default class Events implements IEvents {
   type: string;
   target: any;

@@ -1,6 +1,16 @@
 import EventDispatcher from './EventDispatcher';
 import Events from './Events';
 
+/**
+ * widow.onscroll / onresize を監視し発生時に {@link NativeResizing}.UPDATE events を通知します
+ * @example
+ * const nativeResizing = new NativeResizing();
+ * const onUpdate = (events) => {
+ *   console.log(events);
+ * }
+ * nativeResizing.on(NativeResizing.UPDATE, onUpdate);
+ * nativeResizing.start().fire();
+ */
 export default class NativeResizing extends EventDispatcher {
   public static UPDATE = 'NativeResizing-UPDATE';
   private events: Events;
@@ -65,7 +75,7 @@ export default class NativeResizing extends EventDispatcher {
       scroll: {
         previous: scroll.y,
         y,
-        moved: scroll.y - y,
+        moved: y - scroll.y,
       },
       origin: event,
       changed,

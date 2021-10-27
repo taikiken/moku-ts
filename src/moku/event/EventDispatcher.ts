@@ -5,7 +5,7 @@ interface IListeners {
   [key: string]: Array<{ (events: IEvents): void } | null>;
 }
 
-interface IEventDispatcher {
+export interface IEventDispatcher {
   listeners: IListeners;
   destroy(): boolean;
   on(type: string, listener: (events: IEvents) => void): boolean;
@@ -14,18 +14,42 @@ interface IEventDispatcher {
   dispatch(events: IEvents): boolean;
 }
 
+/**
+ * event dispatcher, override しても使用可能です
+ * @example
+ * const dispatcher: EventDispatcher = new EventDispatcher();
+ * const handler = (events) => {
+ *   console.log(events);
+ * }
+ * dispatcher.on('xxx', handler);
+ *
+ */
 export default class EventDispatcher implements IEventDispatcher {
+  /**
+   * listener function list
+   */
   listeners: IListeners;
 
+  /**
+   * listener 初期化します
+   */
   constructor() {
     this.listeners = { ...{} };
   }
 
+  /**
+   * event listener を破棄します
+   */
   public destroy(): boolean {
     this.listeners = { ...{} };
     return true;
   }
 
+  /**
+   * event listener を event type へバインドします
+   * @param type event type
+   * @param listener event listener
+   */
   public on(type: string, listener: (events: IEvents) => void): boolean {
     if (!type || typeof listener !== 'function') {
       return false;
@@ -40,6 +64,11 @@ export default class EventDispatcher implements IEventDispatcher {
     return true;
   }
 
+  /**
+   * event listener を止めます
+   * @param type event type
+   * @param listener event listener
+   */
   public off(type: string, listener: (events: IEvents) => void): boolean {
     if (!type || typeof listener !== 'function') {
       return false;
@@ -63,6 +92,12 @@ export default class EventDispatcher implements IEventDispatcher {
     return true;
   }
 
+  /**
+   * event listeners から null 値を削除します
+   * @param type event type
+   * @param types event listner list
+   * @private
+   */
   private clean(type: string, types: Array<{ (events: IEvents): void } | null>): boolean {
     const hasMethod = types.some((listener) => typeof listener === 'function');
     if (!hasMethod) {
@@ -71,6 +106,11 @@ export default class EventDispatcher implements IEventDispatcher {
     return !hasMethod;
   }
 
+  /**
+   * listener が存在するか判定します
+   * @param type event type
+   * @param listener 判定対象 listener
+   */
   public has(type: string, listener: (events: IEvents) => void): boolean {
     if (!type || typeof listener !== 'function') {
       return false;
@@ -83,6 +123,10 @@ export default class EventDispatcher implements IEventDispatcher {
     return listeners[type].includes(listener);
   }
 
+  /**
+   * event を通知します
+   * @param events 通知 event
+   */
   public dispatch(events: IEvents): boolean {
     // @type {Object} - events.type:string: [listener:Function...]
     const { listeners } = this;
