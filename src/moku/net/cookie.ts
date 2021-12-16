@@ -62,6 +62,25 @@ const has = (key: string): boolean => get(key) !== null;
  */
 const remove = (key: string): boolean => (has(key) ? set(key, '', new Date()) : false);
 
+/**
+ * cookie 取得関数
+ * - get
+ * - set
+ * - has
+ * - remove
+ * @see https://developer.mozilla.org/ja/docs/Web/HTTP/Cookies
+ * @example
+ * // cookie 設定
+ * cookie.set('CookieName', 'CookieValue');
+ * // cookie 取得
+ * const cookieValue = cookie.get('CookieName');
+ * // cookie 削除
+ * cookie.remove('CookieName');
+ * // cookie 判定
+ * if (cookie.has('CookieName') {
+ *   cookie.remove('CookieName');
+ * }
+ */
 const cookie = {
   get,
   set,
