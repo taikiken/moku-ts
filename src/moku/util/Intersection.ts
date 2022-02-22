@@ -8,18 +8,19 @@ export interface IIntersectionOptions {
 }
 
 export interface IIntersection {
-  check(entries: Array<IntersectionObserverEntry>): void;
-  disconnect(): boolean;
-  shouldDisconnect(): boolean;
+  // check(entries: Array<IntersectionObserverEntry>): void;
+  // disconnect(): boolean;
+  // shouldDisconnect(): boolean;
   intersect(entry: IntersectionObserverEntry): void;
-  parallel(entry: IntersectionObserverEntry): void;
+  outside(entry: IntersectionObserverEntry): void;
   observe(element: HTMLElement): boolean;
   unobserve(element: HTMLElement): boolean;
   add(element: HTMLElement): boolean;
   remove(element: HTMLElement): boolean;
   destroy(): boolean;
-  observer: IntersectionObserver;
-  elements: Array<HTMLElement>;
+  // observer: IntersectionObserver;
+  // elements: Array<HTMLElement|null>;
+  // callOutside: boolean;
 }
 
 /**
@@ -37,25 +38,27 @@ export interface IIntersection {
  *   }
  * }
  */
-export default class Intersection {
+export default class Intersection implements IIntersection {
   private observer: IntersectionObserver;
-  private elements: Array<HTMLElement>;
+  private elements: Array<HTMLElement | null>;
+  private readonly callOutside: boolean;
 
   /**
    * intersection-observer による Element 表示判定準備を行います
-   * @param [elements=[]] 監視対象 element list
    * @param [options={root: null, rootMargin: '0px', threshold: [0.5]}] IntersectionObserver 第二引数オプション
+   * @param {boolean} [callOutside=false] 範囲外の時に callback 実行する flag
    */
   constructor(
-    elements: Array<HTMLElement> = [],
     options: IIntersectionOptions = {
       root: null,
       rootMargin: '0px',
       threshold: [0.5],
-    }
+    },
+    callOutside = false
   ) {
-    this.elements = elements;
+    this.elements = [...[]];
     this.observer = new IntersectionObserver(this.check, options);
+    this.callOutside = callOutside;
   }
 
   /**
@@ -64,7 +67,7 @@ export default class Intersection {
    * @private
    */
   private check(entries: Array<IntersectionObserverEntry>): void {
-    entries.map((entry) => (entry.isIntersecting ? this.intersect(entry) : this.without(entry)));
+    entries.map((entry) => (entry.isIntersecting ? this.intersect(entry) : this.outside(entry)));
   }
 
   /**
@@ -72,6 +75,7 @@ export default class Intersection {
    * @private
    */
   private disconnect(): boolean {
+    this.elements = [...[]];
     this.observer.disconnect();
     return true;
   }
@@ -81,7 +85,12 @@ export default class Intersection {
    * @private
    */
   private shouldDisconnect(): boolean {
-    return this.elements.length === 0 ? this.disconnect() : false;
+    // return this.elements.length === 0 ? this.disconnect() : false;
+    const hasElement = this.elements.some((element) => element !== null);
+    if (!hasElement) {
+      return this.disconnect();
+    }
+    return false;
   }
 
   /**
@@ -96,8 +105,10 @@ export default class Intersection {
    * 非表示時に呼び出されます。
    * @param entry entry.target を使用し処理を行います
    */
-  public without(entry: IntersectionObserverEntry): void {
-    console.log('Intersection.without - entry', entry);
+  public outside(entry: IntersectionObserverEntry): void {
+    if (this.callOutside) {
+      console.log('Intersection.without - entry', entry);
+    }
   }
 
   /**
@@ -108,8 +119,8 @@ export default class Intersection {
     if (this.elements.includes(element)) {
       return false;
     }
+    this.elements?.push(element);
     this.observer.observe(element);
-    this.elements.push(element);
     return true;
   }
 
@@ -123,11 +134,15 @@ export default class Intersection {
       return false;
     }
     this.observer.unobserve(element);
-    const { elements } = this;
-    const index = elements.indexOf(element);
-    elements.splice(index, 1);
-    this.elements = [...elements];
+    // const { elements } = this;
+    // const index = elements.indexOf(element);
+    // elements.splice(index, 1);
+    // this.elements = [...elements];
     // ---
+    const index = this.elements.indexOf(element);
+    if (index >= 0) {
+      this.elements[index] = null;
+    }
     return this.shouldDisconnect();
   }
 
@@ -154,8 +169,7 @@ export default class Intersection {
     if (this.elements.length === 0) {
       return false;
     }
-    this.elements.map((element) => this.observer.unobserve(element));
-    this.elements = [...[]];
+    this.elements.map((element) => element && this.observer.unobserve(element));
     return this.disconnect();
   }
 }
