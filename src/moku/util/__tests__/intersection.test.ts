@@ -1,3 +1,5 @@
+import Intersection from '../Intersection';
+
 /**
  * Utility function that mocks the `IntersectionObserver` API. Necessary for components that rely
  * on it, otherwise the tests will crash. Recommended to execute inside `beforeEach`.
@@ -25,11 +27,11 @@ export function setupIntersectionObserverMock({
     unobserve: (target: Element) => void = unobserve;
   }
 
-  Object.defineProperty(window, 'IntersectionObserver', {
-    writable: true,
-    configurable: true,
-    value: MockIntersectionObserver,
-  });
+  // Object.defineProperty(window, 'IntersectionObserver', {
+  //   writable: true,
+  //   configurable: true,
+  //   value: MockIntersectionObserver,
+  // });
 
   Object.defineProperty(global, 'IntersectionObserver', {
     writable: true,
@@ -37,3 +39,12 @@ export function setupIntersectionObserverMock({
     value: MockIntersectionObserver,
   });
 }
+
+describe('describe Intersection', () => {
+  setupIntersectionObserverMock();
+
+  test('Intersection', () => {
+    const intersection = new Intersection();
+    expect(intersection).toBe(intersection);
+  });
+});
