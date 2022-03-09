@@ -62,7 +62,7 @@ export default class NativeResizing extends EventDispatcher {
       height !== frame.height ||
       bodyWidth !== body.width ||
       bodyHeight !== body.height;
-    const option = {
+    this.option = {
       frame: {
         width,
         height,
@@ -80,8 +80,7 @@ export default class NativeResizing extends EventDispatcher {
       origin: event,
       changed,
     };
-    this.option = { ...option };
-    clone.option = { ...option };
+    clone.option = { ...this.option };
     this.dispatch(clone);
   }
   public start() {

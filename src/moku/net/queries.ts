@@ -1,17 +1,17 @@
-/**
- * `&amp;` を `&` へ変換します
- * @param text
- */
-const and = (text: string): string => text.replace(/\&amp;/g, '&');
+import and from '../util/str/and';
 
-const get = (text: string): string => (text.substr(0, 1) === '?' ? text.substring(1) : text);
+const clean = (text: string): string => (text.substr(0, 1) === '?' ? text.substring(1) : text);
 
-interface IParsedQuery {
+export interface IParsedQuery {
   [key: string]: string | undefined;
 }
 
+/**
+ * url query をパースし key: value Object を生成します
+ * @param queryString
+ */
 const parse = (queryString = window.location.search): IParsedQuery =>
-  get(and(queryString))
+  clean(and(queryString))
     .split('&')
     .reduce((prev: IParsedQuery, current) => {
       const [key, value] = current.split('=');
@@ -20,8 +20,7 @@ const parse = (queryString = window.location.search): IParsedQuery =>
     }, {});
 
 const queries = {
-  and,
-  get,
+  clean,
   parse,
 };
 

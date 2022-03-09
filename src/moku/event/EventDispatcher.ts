@@ -7,7 +7,8 @@ interface IListeners {
 
 export interface IEventDispatcher {
   listeners: IListeners;
-  destroy(): boolean;
+  destroy(type: string): boolean;
+  length(type: string): boolean;
   on(type: string, listener: (events: IEvents) => void): boolean;
   off(type: string, listener: (events: IEvents) => void): boolean;
   has(type: string, listener: (events: IEvents) => void): boolean;
@@ -38,10 +39,11 @@ export default class EventDispatcher implements IEventDispatcher {
   }
 
   /**
-   * event listener を破棄します
+   * 引数タイプの event listener を破棄します
+   * @param type event type
    */
-  public destroy(): boolean {
-    this.listeners = { ...{} };
+  public destroy(type: string): boolean {
+    this.listeners[type] = [...[]];
     return true;
   }
 
@@ -121,6 +123,14 @@ export default class EventDispatcher implements IEventDispatcher {
       return false;
     }
     return listeners[type].includes(listener);
+  }
+
+  /**
+   * 該当 event type が存在するかを判定します
+   * @param type
+   */
+  public length(type: string): boolean {
+    return this.listeners[type]?.length > 0;
   }
 
   /**
