@@ -1,3 +1,7 @@
+export type TEventsOption = {
+  option?: {};
+};
+
 export interface IEvents {
   clone(): Events;
   type: string;
@@ -14,13 +18,12 @@ export default class Events implements IEvents {
   target: any;
   currentTarget: any;
   option?: any;
-  constructor(type: string, target: any = null, currentTarget: any = null) {
+  constructor(type: string, target: any = undefined, currentTarget: any = undefined) {
     this.type = type;
     this.target = target;
     this.currentTarget = currentTarget;
-    this.option = null;
   }
-  public clone(): Events {
+  clone(): IEvents {
     return new Events(this.type, this.target, this.currentTarget);
   }
 }

@@ -1,19 +1,32 @@
 import EventDispatcher from '../event/EventDispatcher';
-import Events from '../event/Events';
-
+import TickEvents from './TickEvents';
+/**
+ * `requestAnimationFrame` 由来の Tick.UPDATE を発火します
+ * @singleton
+ */
 export default class Tick extends EventDispatcher {
+  /**
+   * event type
+   */
   static UPDATE: string = 'tick-update';
   private static id: number = -1;
   private static instance: Tick;
-  private events: Events = new Events(Tick.UPDATE, this, this);
-  private onCycle = (timestamp: number = 0) => {
-    const id = requestAnimationFrame(this.onCycle);
+  private events: TickEvents = new TickEvents(Tick.UPDATE, this, this, {
+    id: Tick.id,
+    timestamp: 0,
+  });
+  private onUpdate = (timestamp: number = 0) => {
+    const id = requestAnimationFrame(this.onUpdate);
     Tick.id = id;
     const clone = this.events.clone();
     clone.option.id = id;
     clone.option.timestamp = timestamp;
     this.dispatch(clone);
   };
+
+  /**
+   * singleton instance を返します
+   */
   static factory(): Tick {
     if (!Tick.instance) {
       Tick.instance = new Tick();
@@ -30,7 +43,7 @@ export default class Tick extends EventDispatcher {
    */
   start() {
     if (this.length(Tick.UPDATE) && Tick.id < 0) {
-      this.onCycle();
+      this.onUpdate();
     }
   }
 
