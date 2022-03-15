@@ -13,7 +13,7 @@ export interface IPollingEvents extends IEvents {
  * {@link Polling} イベント
  */
 export default class PollingEvents extends Events implements IPollingEvents {
-  option: TPollingEventsOption;
+  public option: TPollingEventsOption;
   constructor(
     type: string,
     target: any = undefined,

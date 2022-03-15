@@ -8,7 +8,7 @@ export default class Tick extends EventDispatcher {
   /**
    * event type
    */
-  static UPDATE: string = 'tick-update';
+  public static UPDATE: string = 'tick-update';
   private static id: number = -1;
   private static instance: Tick;
   private events: TickEvents = new TickEvents(Tick.UPDATE, this, this, {
@@ -27,7 +27,7 @@ export default class Tick extends EventDispatcher {
   /**
    * singleton instance を返します
    */
-  static factory(): Tick {
+  public static factory(): Tick {
     if (!Tick.instance) {
       Tick.instance = new Tick();
     }
@@ -41,7 +41,7 @@ export default class Tick extends EventDispatcher {
    * requestAnimationFrame を開始します
    * - Tick.UPDATE listener が存在し稼働していない時に実行されます
    */
-  start() {
+  public start() {
     if (this.length(Tick.UPDATE) && Tick.id < 0) {
       this.onUpdate();
     }
@@ -51,7 +51,7 @@ export default class Tick extends EventDispatcher {
    * requestAnimationFrame を停止します
    * - Tick.UPDATE listener が存在し無い時に停止可能です
    */
-  stop() {
+  public stop() {
     if (!this.length(Tick.UPDATE)) {
       cancelAnimationFrame(Tick.id);
       Tick.id = -1;
@@ -63,7 +63,7 @@ export default class Tick extends EventDispatcher {
    * - listener は強制解除されます
    * @param type event type
    */
-  destroy(type: string = Tick.UPDATE): boolean {
+  public destroy(type: string = Tick.UPDATE): boolean {
     const result = super.destroy(type);
     this.stop();
     return result;

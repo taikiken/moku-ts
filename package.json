@@ -17,7 +17,7 @@
     ],
     "*.{js,jsx,ts,tsx,scss}": [
       "prettier --write",
-      "lint --fix"
+      "eslint --fix"
     ]
   },
   "devDependencies": {

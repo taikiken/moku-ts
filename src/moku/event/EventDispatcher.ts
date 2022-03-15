@@ -2,7 +2,7 @@ import { IEvents } from './Events';
 
 type TListeners = {
   // events.type を key の配列 - event listener or null がセットされる
-  [key: string]: Array<{ (events: IEvents): void } | null>;
+  [key: string]: Array<{ (events: IEvents): void } | undefined>;
 };
 
 export interface IEventDispatcher {
@@ -89,7 +89,7 @@ export default class EventDispatcher implements IEventDispatcher {
     }
     // すぐに削除するのでは無く null 代入
     // loop(iterator) の中で off すると index 位置が変わりまずい
-    types[index] = null;
+    types[index] = undefined;
     this.clean(type, types);
     return true;
   }
@@ -125,7 +125,7 @@ export default class EventDispatcher implements IEventDispatcher {
    * @param types event listner list
    * @private
    */
-  private clean(type: string, types: Array<{ (events: IEvents): void } | null>): boolean {
+  private clean(type: string, types: Array<{ (events: IEvents): void } | undefined>): boolean {
     const hasMethod = types.some((listener) => typeof listener === 'function');
     if (!hasMethod) {
       this.listeners[type] = [...[]];

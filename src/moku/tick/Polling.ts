@@ -10,7 +10,7 @@ export default class Polling extends EventDispatcher {
   /**
    * event type
    */
-  static UPDATE: string = 'polling-update';
+  public static UPDATE: string = 'polling-update';
   private begin: number = -1;
   private interval: number = 0;
   private tick: Tick = Tick.factory();
@@ -27,7 +27,7 @@ export default class Polling extends EventDispatcher {
     super();
     this.events = new PollingEvents(Polling.UPDATE, this, this, { interval, timestamp: 0 });
   }
-  start(): Polling {
+  public start(): Polling {
     this.stop();
     if (this.begin < 0) {
       this.begin = Date.now();
@@ -36,11 +36,11 @@ export default class Polling extends EventDispatcher {
     this.tick.start();
     return this;
   }
-  stop(): Polling {
+  public stop(): Polling {
     this.tick.off(Tick.UPDATE, this.onUpdate);
     return this;
   }
-  fire(timestamp = Date.now()) {
+  public fire(timestamp = Date.now()) {
     const events = this.updateEvents(timestamp);
     this.dispatch(events);
   }

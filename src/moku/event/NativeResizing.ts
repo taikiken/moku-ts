@@ -72,7 +72,11 @@ export default class NativeResizing extends EventDispatcher {
       origin: event,
       changed,
     };
-    clone.option = { ...option };
+    clone.option.frame = { ...option.frame };
+    clone.option.body = { ...option.body };
+    clone.option.scroll = { ...option.scroll };
+    clone.option.origin = event;
+    clone.option.changed = changed;
     this.events.option = clone.option;
     this.dispatch(clone);
   }

@@ -55,7 +55,7 @@ export default class NativeResizingEvents extends Events implements INativeResiz
     super(type, target, currentTarget);
     this.option = option;
   }
-  clone(): NativeResizingEvents {
+  public clone(): NativeResizingEvents {
     return new NativeResizingEvents(this.type, this.target, this.currentTarget, this.option);
   }
 }
