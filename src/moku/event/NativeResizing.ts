@@ -36,9 +36,9 @@ export default class NativeResizing extends EventDispatcher {
     this.onUpdate();
     return this;
   }
-  private onUpdate(event?: Event) {
+  private onUpdate = (event?: Event) => {
     const clone = this.events.clone();
-    const { body, frame, scroll } = this.events.option;
+    const { scroll } = this.events.option;
     const y = window.pageYOffset;
     // @type {number} - window width
     const width = window.innerWidth;
@@ -47,13 +47,13 @@ export default class NativeResizing extends EventDispatcher {
     // --- [body]
     const bodyWidth = document.body.clientWidth;
     const bodyHeight = document.body.clientHeight;
-    const changed =
-      !event ||
-      scroll.y !== y ||
-      width !== frame.width ||
-      height !== frame.height ||
-      bodyWidth !== body.width ||
-      bodyHeight !== body.height;
+    // const changed =
+    //   !event ||
+    //   scroll.y !== y ||
+    //   width !== frame.width ||
+    //   height !== frame.height ||
+    //   bodyWidth !== body.width ||
+    //   bodyHeight !== body.height;
     const option = {
       frame: {
         width,
@@ -70,14 +70,14 @@ export default class NativeResizing extends EventDispatcher {
         moved: y - scroll.y,
       },
       origin: event,
-      changed,
+      // changed,
     };
     clone.option.frame = { ...option.frame };
     clone.option.body = { ...option.body };
     clone.option.scroll = { ...option.scroll };
     clone.option.origin = event;
-    clone.option.changed = changed;
+    // clone.option.changed = changed;
     this.events.option = clone.option;
     this.dispatch(clone);
-  }
+  };
 }

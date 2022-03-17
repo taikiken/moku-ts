@@ -8,7 +8,7 @@ export default class Tick extends EventDispatcher {
   /**
    * event type
    */
-  public static UPDATE: string = 'tick-update';
+  public static UPDATE: string = 'Tick-UPDATE';
   private static id: number = -1;
   private static instance: Tick;
   private events: TickEvents = new TickEvents(Tick.UPDATE, this, this, {

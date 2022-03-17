@@ -1,11 +1,16 @@
 import Events, { IEvents } from './Events';
 
+// box-sizing 設定により body / frame width, height 数値変わるので注意
 export type TNativeResizingEvents = {
+  // document.body.clientWidth / document.body.clientHeight - margin / border 含まない
+  // https://developer.mozilla.org/ja/docs/Web/API/Element/clientWidth
   body: {
     width: number;
     height: number;
   };
   // window props
+  // window.innerWidth / window.innerHeight - margin / border 含む
+  // https://developer.mozilla.org/ja/docs/Web/API/Window/innerWidth
   frame: {
     width: number;
     height: number;
@@ -17,7 +22,7 @@ export type TNativeResizingEvents = {
     moved: number;
   };
   origin: Event | undefined;
-  changed: boolean;
+  // changed: boolean;
 };
 
 export interface INativeResizingEvents extends IEvents {
@@ -41,7 +46,7 @@ const config: TNativeResizingEvents = {
     moved: 0,
   },
   origin: undefined,
-  changed: false,
+  // changed: false,
 };
 
 export default class NativeResizingEvents extends Events implements INativeResizingEvents {
@@ -55,7 +60,7 @@ export default class NativeResizingEvents extends Events implements INativeResiz
     super(type, target, currentTarget);
     this.option = option;
   }
-  public clone(): NativeResizingEvents {
+  public clone(): INativeResizingEvents {
     return new NativeResizingEvents(this.type, this.target, this.currentTarget, this.option);
   }
 }

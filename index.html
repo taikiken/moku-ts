@@ -5,9 +5,100 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      .page {
+        padding: 16px;
+      }
+    </style>
   </head>
   <body>
+  <div class="page">
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
+    <h2>queries</h2>
+    <pre id="queries-message"></pre>
+    <div style="word-break: break-all;">
+      <a href="/">/</a>
+      <br>
+      <a href="/?note=xyz&module=xbxbxb">/?note=xyz&module=xbxbxb</a>
+      <br>
+      <a href="/?mini=true&amp;url=https%3A%2F%2Ftakeda.info%2F3gPDxUj&amp;title=%E5%8C%85%E8%A3%85%E3%83%A9%E3%82%A4%E3%83%B3%E7%AE%A1%E7%90%86%E3%81%AE%E8%87%AA%E5%8B%95%E5%8C%96%E3%81%AB%E5%85%89%E3%82%92%E5%BD%93%E3%81%A6%E3%82%8B%20ALC%E6%8C%91%E6%88%A6%E3%81%B8%E3%81%AE%E6%83%B3%E3%81%84%EF%BD%9CSPOTLIGHT%20vol.04%EF%BD%9C%E4%B8%96%E7%95%8C%E3%81%AB%E5%B0%BD%E3%81%8F%E3%81%9B%E3%80%81%E3%82%BF%E3%82%B1%E3%83%80%E3%80%82&amp;summary=&amp;source=">/?mini=true&amp;url=https%3A%2F%2Ftakeda.info%2F3gPDxUj&amp;title=%E5%8C%85%E8%A3%85%E3%83%A9%E3%82%A4%E3%83%B3%E7%AE%A1%E7%90%86%E3%81%AE%E8%87%AA%E5%8B%95%E5%8C%96%E3%81%AB%E5%85%89%E3%82%92%E5%BD%93%E3%81%A6%E3%82%8B%20ALC%E6%8C%91%E6%88%A6%E3%81%B8%E3%81%AE%E6%83%B3%E3%81%84%EF%BD%9CSPOTLIGHT%20vol.04%EF%BD%9C%E4%B8%96%E7%95%8C%E3%81%AB%E5%B0%BD%E3%81%8F%E3%81%9B%E3%80%81%E3%82%BF%E3%82%B1%E3%83%80%E3%80%82&amp;summary=&amp;source=</a>
+    </div>
+    <script type="module">
+      import queries from './src/moku/net/queries'
+      const message = document.getElementById('queries-message')
+      const parsed = queries.parse()
+      console.log('parsed', parsed)
+      Object.keys(parsed).map((key, index) => {
+        const div = document.createElement('div')
+        div.textContent = `${index}. ${key}: ${parsed[key]}`
+        message.appendChild(div)
+      })
+    </script>
+
+    <h2>NativeResizing</h2>
+    <pre id="message"></pre>
+    <script type="module">
+      // NativeResizing
+      import NativeResizingSingle from './src/moku/event/NativeResizingSingle'
+      import NativeResizing from './src/moku/event/NativeResizing'
+      const resizing = NativeResizingSingle.factory()
+      const message = document.getElementById('message')
+      let count = 0
+      const onResizing = (events) => {
+        // console.log('events', events.option)
+        count = count + 1
+        const div = document.createElement('div')
+        const p = document.createElement('p')
+        p.textContent = `${count}.
+        y: ${events.option.scroll.y},
+        moved: ${events.option.scroll.moved},
+        body.width: ${events.option.body.width},
+        body.height: ${events.option.body.height},
+        frame.width: ${events.option.frame.width},
+        frame.height: ${events.option.frame.height},
+        frame.bottom: ${events.option.frame.bottom},
+        `
+        div.appendChild(p)
+        if (message.hasChildNodes()) {
+          message.replaceChild(div, message.childNodes[0]);
+        } else {
+          message.appendChild(div)
+        }
+        // if (count === 10) {
+        //   resizing.off(NativeResizing.UPDATE, onResizing)
+        // }
+      }
+      resizing.on(NativeResizing.UPDATE, onResizing)
+      resizing
+        .start()
+        .fire()
+    </script>
+
+    <h2>Intersection</h2>
+    <div class="rise" style="height: 300px; border: 1px solid #ccc; margin: 10px;"></div>
+    <div class="rise" style="height: 300px; border: 1px solid #ccc; margin: 10px;"></div>
+    <div class="rise" style="height: 300px; border: 1px solid #ccc; margin: 10px;"></div>
+    <div class="rise" style="height: 300px; border: 1px solid #ccc; margin: 10px;"></div>
+    <div class="rise" style="height: 300px; border: 1px solid #ccc; margin: 10px;"></div>
+    <script type="module">
+      import Intersection from './src/moku/util/Intersection'
+      const observer = new Intersection();
+      observer.intersect = function (entry) {
+        entry.target.classList.add('intersect')
+        entry.target.textContent = 'intersect'
+        this.unobserve(entry.target)
+      }
+      Array.from(document.getElementsByClassName('rise')).map((element) => {
+        observer.add(element)
+      })
+    </script>
+  </div>
   </body>
 </html>

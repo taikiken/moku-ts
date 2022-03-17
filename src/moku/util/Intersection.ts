@@ -57,7 +57,7 @@ export default class Intersection implements IIntersection {
     callOutside = false
   ) {
     this.elements = [...[]];
-    this.observer = new IntersectionObserver(this.check, options);
+    this.observer = new IntersectionObserver(this.onCheck, options);
     this.callOutside = callOutside;
   }
 
@@ -66,9 +66,9 @@ export default class Intersection implements IIntersection {
    * @param entries IntersectionObserverEntry entry.isIntersecting 判定を使用し表示・非表示判定を行います
    * @private
    */
-  private check(entries: Array<IntersectionObserverEntry>): void {
+  private onCheck = (entries: Array<IntersectionObserverEntry>): void => {
     entries.map((entry) => (entry.isIntersecting ? this.intersect(entry) : this.outside(entry)));
-  }
+  };
 
   /**
    * IntersectionObserver.disconnect を実施します - 監視を停止します

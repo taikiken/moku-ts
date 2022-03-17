@@ -137,7 +137,7 @@ export default class EventDispatcher implements IEventDispatcher {
    * event を通知します
    * @param events 通知 event
    */
-  protected dispatch(events: IEvents): boolean {
+  public dispatch(events: IEvents): boolean {
     // @type {Object} - events.type:string: [listener:Function...]
     const { listeners } = this;
     // @type {string} - event type

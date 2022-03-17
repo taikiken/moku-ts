@@ -5,9 +5,11 @@ import NativeResizing from './NativeResizing';
  * @example
  * const nativeResizing: NativeResizing = NativeResizingSingle.factory();
  */
-export default class NativeResizingSingle {
+export default class NativeResizingSingle extends NativeResizing {
   private static instance: NativeResizing;
-  private constructor() {}
+  private constructor() {
+    super();
+  }
   public static factory(): NativeResizing {
     if (!NativeResizingSingle.instance) {
       NativeResizingSingle.instance = new NativeResizing();

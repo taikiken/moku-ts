@@ -1,6 +1,6 @@
 import EventDispatcher from '../event/EventDispatcher';
 import Tick from './Tick';
-import PollingEvents from './PollingEvents';
+import PollingEvents, { IPollingEvents } from './PollingEvents';
 
 /**
  * 一定経過時間ごとに Polling.UPDATE を発火します
@@ -10,7 +10,7 @@ export default class Polling extends EventDispatcher {
   /**
    * event type
    */
-  public static UPDATE: string = 'polling-update';
+  public static UPDATE: string = 'Polling-UPDATE';
   private begin: number = -1;
   private interval: number = 0;
   private tick: Tick = Tick.factory();
@@ -44,7 +44,7 @@ export default class Polling extends EventDispatcher {
     const events = this.updateEvents(timestamp);
     this.dispatch(events);
   }
-  private updateEvents(timestamp: number): PollingEvents {
+  private updateEvents(timestamp: number): IPollingEvents {
     const clone = this.events.clone();
     const { interval } = this;
     clone.option = {

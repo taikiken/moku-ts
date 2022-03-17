@@ -23,7 +23,7 @@ export default class PollingEvents extends Events implements IPollingEvents {
     super(type, target, currentTarget);
     this.option = option;
   }
-  public clone(): PollingEvents {
+  public clone(): IPollingEvents {
     return new PollingEvents(this.type, this.target, this.currentTarget, this.option);
   }
 }
