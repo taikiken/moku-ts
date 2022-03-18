@@ -9,7 +9,7 @@ export default class ComputedStyle {
   getCSSStyle(): CSSStyleDeclaration {
     return getCSSStyle(this.element);
   }
-  getStyle(property: string) {
+  getValue(property: string) {
     return getValue(this.element, property);
   }
 }
