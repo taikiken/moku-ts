@@ -1,7 +1,7 @@
 import { IEvents } from './Events';
 
 type TListeners = {
-  // events.type を key の配列 - event listener or null がセットされる
+  // events.type を key の配列 - event listener or undefined がセットされる
   [key: string]: Array<{ (events: IEvents): void } | undefined>;
 };
 
@@ -87,7 +87,7 @@ export default class EventDispatcher implements IEventDispatcher {
       // 存在しない
       return false;
     }
-    // すぐに削除するのでは無く null 代入
+    // すぐに削除するのでは無く undefined 代入
     // loop(iterator) の中で off すると index 位置が変わりまずい
     types[index] = undefined;
     this.clean(type, types);
@@ -120,7 +120,7 @@ export default class EventDispatcher implements IEventDispatcher {
   }
 
   /**
-   * event listeners から null 値を削除します
+   * event listeners から undefined 値を削除します
    * @param type event type
    * @param types event listner list
    * @private

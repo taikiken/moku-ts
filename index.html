@@ -34,6 +34,53 @@
   <div class="page">
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
+    <h2>cookie</h2>
+    <label>
+      cookie[__example__] value:
+      <input type="text" class="cookie-data">
+    </label>
+    <pre id="cookie-message"></pre>
+    <input type="button" class="cookie-set" value="set">
+    <input type="button" class="cookie-delete" value="delete">
+    <input type="button" class="cookie-get" value="get">
+    <script type="module">
+      import cookie from './src/moku/net/cookie'
+      const message = document.getElementById('cookie-message')
+      const data = document.querySelector('.cookie-data')
+      document.querySelector('.cookie-set').addEventListener('click', () => {
+        cookie.set('__example__', data.value)
+      }, false)
+      document.querySelector('.cookie-delete').addEventListener('click', () => {
+        cookie.remove('__example__')
+      }, false)
+      document.querySelector('.cookie-get').addEventListener('click', () => {
+        const value = cookie.get('__example__')
+        message.textContent = `__example__: ${value}`
+      }, false)
+    </script>
+
+    <h2>Polling</h2>
+    <pre id="polling-message"></pre>
+    <input type="button" value="start" class="button-start">
+    <input type="button" value="stop" class="button-stop">
+    <script type="module">
+      import Polling from './src/moku/tick/Polling'
+      const message = document.getElementById('polling-message')
+      const one = new Polling(1000)
+      let count = 0;
+      const onUpdate = ({ option }) => {
+        count = count + 1
+        message.textContent = `${count}. ${option.interval}ms timestamp: ${option.timestamp}`
+      }
+      one.on(Polling.UPDATE, onUpdate)
+      document.querySelector('.button-start').addEventListener('click', ()=> {
+        one.start().fire()
+      }, false)
+      document.querySelector('.button-stop').addEventListener('click', ()=> {
+        one.stop()
+      }, false)
+    </script>
+
     <h2>CSS</h2>
     <div class="style-container">.style-container test</div>
     <pre id="style-message"></pre>

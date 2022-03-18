@@ -1,16 +1,13 @@
 // IE polyfill
 import 'intersection-observer';
 
-export interface IIntersectionOptions {
+export type TIntersectionOptions = {
   root: HTMLElement | null;
   rootMargin: string;
   threshold: Array<number>;
-}
+};
 
 export interface IIntersection {
-  // check(entries: Array<IntersectionObserverEntry>): void;
-  // disconnect(): boolean;
-  // shouldDisconnect(): boolean;
   intersect(entry: IntersectionObserverEntry): void;
   outside(entry: IntersectionObserverEntry): void;
   observe(element: HTMLElement): boolean;
@@ -18,10 +15,13 @@ export interface IIntersection {
   add(element: HTMLElement): boolean;
   remove(element: HTMLElement): boolean;
   destroy(): boolean;
-  // observer: IntersectionObserver;
-  // elements: Array<HTMLElement|null>;
-  // callOutside: boolean;
 }
+
+export const intersectionConfig: TIntersectionOptions = {
+  root: null,
+  rootMargin: '0px',
+  threshold: [0.5],
+};
 
 /**
  * intersection-observer による Element 表示判定を行います
@@ -40,7 +40,7 @@ export interface IIntersection {
  */
 export default class Intersection implements IIntersection {
   private observer: IntersectionObserver;
-  private elements: Array<HTMLElement | null>;
+  private elements: Array<HTMLElement | undefined>;
   private readonly callOutside: boolean;
 
   /**
@@ -48,14 +48,7 @@ export default class Intersection implements IIntersection {
    * @param [options={root: null, rootMargin: '0px', threshold: [0.5]}] IntersectionObserver 第二引数オプション
    * @param {boolean} [callOutside=false] 範囲外の時に callback 実行する flag
    */
-  constructor(
-    options: IIntersectionOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: [0.5],
-    },
-    callOutside = false
-  ) {
+  constructor(options: TIntersectionOptions = intersectionConfig, callOutside = false) {
     this.elements = [...[]];
     this.observer = new IntersectionObserver(this.onCheck, options);
     this.callOutside = callOutside;
@@ -85,8 +78,7 @@ export default class Intersection implements IIntersection {
    * @private
    */
   private shouldDisconnect(): boolean {
-    // return this.elements.length === 0 ? this.disconnect() : false;
-    const hasElement = this.elements.some((element) => element !== null);
+    const hasElement = this.elements.some((element) => element !== undefined);
     if (!hasElement) {
       return this.disconnect();
     }
@@ -134,14 +126,10 @@ export default class Intersection implements IIntersection {
       return false;
     }
     this.observer.unobserve(element);
-    // const { elements } = this;
-    // const index = elements.indexOf(element);
-    // elements.splice(index, 1);
-    // this.elements = [...elements];
     // ---
     const index = this.elements.indexOf(element);
     if (index >= 0) {
-      this.elements[index] = null;
+      this.elements[index] = undefined;
     }
     return this.shouldDisconnect();
   }

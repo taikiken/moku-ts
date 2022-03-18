@@ -25,6 +25,7 @@ export default class Polling extends EventDispatcher {
   };
   constructor(interval: number) {
     super();
+    this.interval = interval;
     this.events = new PollingEvents(Polling.UPDATE, this, this, { interval, timestamp: 0 });
   }
   public start(): Polling {

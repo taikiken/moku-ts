@@ -2,39 +2,39 @@
  * cookie を取得します
  * @param key 取得 cookie name
  */
-const get = (key: string): string | null => {
+const get = (key: string): string | undefined => {
   const { cookie } = document;
   const escapeKey = encodeURIComponent(key).replace(/[-.+*]/g, '\\$&');
   const exp = new RegExp(`(?:(?:^|.*;)\\s*${escapeKey}\\s*\\=\\s*([^;]*).*$)|^.*$`);
-  return decodeURIComponent(cookie.replace(exp, '$1')) || null;
+  return decodeURIComponent(cookie.replace(exp, '$1')) || undefined;
 };
 
 /**
  * cookie 設定します
  * @param key cookie name
  * @param value cookie value
- * @param [end=null] cookie 持続可能時間, null 値の場合は session cookie となりブラウザを閉じるまでになります
+ * @param [end=undefined] cookie 持続可能時間, undefined 値の場合は session cookie となりブラウザを閉じるまでになります
  * @param [path='/'] cookie path
- * @param [domain=null] cookie 受信可能ホスト - 通常設定無し
- * @param [domain=null] cookie 受信可能ホスト - 通常設定無しで構いません
+ * @param [domain=undefined] cookie 受信可能ホスト - 通常設定無し
+ * @param [domain=undefined] cookie 受信可能ホスト - 通常設定無しで構いません
  * @param [secure=true] https protocol only 指定します
  */
 const set = (
   key: string,
   value: string | number,
-  end: Date | null = null,
+  end: Date | undefined = undefined,
   path: string = '/',
-  domain: string | null = null,
+  domain: string | undefined = undefined,
   secure: boolean = true
 ): boolean => {
   let cookie = `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-  if (end !== null && end) {
+  if (end !== undefined && end) {
     cookie += `; expires=${end.toUTCString()}`;
   }
-  if (path !== null && path) {
+  if (path !== undefined && path) {
     cookie += `; path=${path}`;
   }
-  if (domain !== null && domain) {
+  if (domain !== undefined && domain) {
     cookie += `; domain=${domain}`;
   }
   if (secure && location.protocol === 'https:') {
@@ -52,7 +52,7 @@ const set = (
  * cookie 保持しているかを判定します
  * @param key cookie name
  */
-const has = (key: string): boolean => get(key) !== null;
+const has = (key: string): boolean => get(key) !== undefined;
 
 /**
  * cookie を削除します
