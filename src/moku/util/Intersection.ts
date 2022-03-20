@@ -2,7 +2,7 @@
 import 'intersection-observer';
 
 export type TIntersectionOptions = {
-  root: HTMLElement | null;
+  root: HTMLElement | undefined;
   rootMargin: string;
   threshold: Array<number>;
 };
@@ -18,7 +18,7 @@ export interface IIntersection {
 }
 
 export const intersectionConfig: TIntersectionOptions = {
-  root: null,
+  root: undefined,
   rootMargin: '0px',
   threshold: [0.5],
 };
@@ -45,7 +45,7 @@ export default class Intersection implements IIntersection {
 
   /**
    * intersection-observer による Element 表示判定準備を行います
-   * @param [options={root: null, rootMargin: '0px', threshold: [0.5]}] IntersectionObserver 第二引数オプション
+   * @param [options={root: undefined, rootMargin: '0px', threshold: [0.5]}] IntersectionObserver 第二引数オプション
    * @param {boolean} [callOutside=false] 範囲外の時に callback 実行する flag
    */
   constructor(options: TIntersectionOptions = intersectionConfig, callOutside = false) {
